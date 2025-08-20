@@ -57,6 +57,12 @@ public struct Message: Identifiable, Hashable, Sendable {
     public var replyMessage: ReplyMessage?
 
     public var triggerRedraw: UUID?
+    
+    public var systemMessageType: Int?
+    public var systemMessageArgs: [String]?
+    public var threadId: Int64?
+    public var unreadCount: Int?
+
 
     public init(id: String,
                 user: User,
