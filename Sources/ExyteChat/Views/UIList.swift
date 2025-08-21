@@ -108,7 +108,13 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
 
         if coordinator.sections.isEmpty {
             coordinator.sections = sections
-            tableView.reloadData()
+            if !coordinator.animationsEnabled {
+                UIView.performWithoutAnimation {
+                    tableView.reloadData()
+                }
+            } else {
+                tableView.reloadData()
+            }
             if !isScrollEnabled {
                 DispatchQueue.main.async {
                     tableContentHeight = tableView.contentSize.height
