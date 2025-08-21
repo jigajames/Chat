@@ -748,7 +748,7 @@ public extension ChatView {
     let monday = try! Date.iso8601Date.parse("2025-05-12")
     let tuesday = try! Date.iso8601Date.parse("2025-05-13")
 
-    return ChatView(messages: [
+    ChatView(messages: [
         Message(
             id: "26tb", user: romeo, status: .read, createdAt: monday,
             text: "And I’ll still stay, to have thee still forget"),
