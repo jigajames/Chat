@@ -127,6 +127,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     var availableInputs: [AvailableInputType] = [.text, .audio, .giphy, .media]
     var recorderSettings: RecorderSettings = RecorderSettings()
     var listSwipeActions: ListSwipeActions = ListSwipeActions()
+    var animationsEnabled: Bool = true
     
     @StateObject private var viewModel = ChatViewModel()
     @StateObject private var inputViewModel = InputViewModel()
@@ -149,6 +150,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     
     public init(messages: [Message],
                 chatType: ChatType = .conversation,
+                animationsEnabled: Bool = true,
                 replyMode: ReplyMode = .quote,
                 didSendMessage: @escaping (DraftMessage) -> Void,
                 reactionDelegate: ReactionDelegate? = nil,
@@ -157,6 +159,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
                 messageMenuAction: MessageMenuActionClosure?,
                 localization: ChatLocalization) {
         self.type = chatType
+        self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -341,7 +344,8 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
             messageFont: messageFont,
             sections: sections,
             ids: ids,
-            listSwipeActions: listSwipeActions
+            listSwipeActions: listSwipeActions,
+            animationsEnabled: animationsEnabled
         )
         .applyIf(!isScrollEnabled) {
             $0.frame(height: tableContentHeight)
@@ -744,7 +748,7 @@ public extension ChatView {
     let monday = try! Date.iso8601Date.parse("2025-05-12")
     let tuesday = try! Date.iso8601Date.parse("2025-05-13")
 
-    ChatView(messages: [
+    return ChatView(messages: [
         Message(
             id: "26tb", user: romeo, status: .read, createdAt: monday,
             text: "And I’ll still stay, to have thee still forget"),
@@ -786,5 +790,5 @@ public extension ChatView {
         Message(
             id: "Mwh6", user: juliet, status: .sent, createdAt: tuesday,
             text: "That I shall say 'Good night' till it be morrow"),
-    ]) { draft in }
+    ], animationsEnabled: false) { draft in }
 }

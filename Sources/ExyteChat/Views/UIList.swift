@@ -44,6 +44,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
     let sections: [MessagesSection]
     let ids: [String]
     let listSwipeActions: ListSwipeActions
+    let animationsEnabled: Bool
 
     @State var isScrolledToTop = false
     @State var updateQueue = UpdateQueue()
@@ -140,6 +141,10 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
 
     @MainActor
     private func applyUpdatesToTable(_ tableView: UITableView, splitInfo: SplitInfo, updateContextClosure: ([MessagesSection])->()) async {
+        let animationsEnabled = (tableView.window?.isHidden == false) && self.animationsEnabled
+        if !animationsEnabled {
+            UIView.setAnimationsEnabled(false)
+        }
         // step 0: preparation
         // prepare intermediate sections and operations
         //print("whole appliedDeletes:\n", formatSections(splitInfo.appliedDeletes), "\n")
@@ -186,7 +191,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
                 applyOperation(operation, tableView: tableView)
             }
         }
-        UIView.setAnimationsEnabled(true)
+        UIView.setAnimationsEnabled(animationsEnabled)
         //print("3 finished edits", runID)
 
         if isScrolledToBottom || isScrolledToTop {
@@ -205,6 +210,9 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             if !isScrollEnabled {
                 tableContentHeight = tableView.contentSize.height
             }
+        }
+        if !animationsEnabled {
+            UIView.setAnimationsEnabled(true)
         }
     }
 
@@ -371,7 +379,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             showMessageTimeView: showMessageTimeView,
             messageLinkPreviewLimit: messageLinkPreviewLimit, messageFont: messageFont,
             sections: sections, ids: ids, mainBackgroundColor: theme.colors.mainBG,
-            listSwipeActions: listSwipeActions)
+            listSwipeActions: listSwipeActions, animationsEnabled: animationsEnabled)
     }
 
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -407,6 +415,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         let ids: [String]
         let mainBackgroundColor: Color
         let listSwipeActions: ListSwipeActions
+        let animationsEnabled: Bool
 
         private let impactGenerator = UIImpactFeedbackGenerator(style: .heavy)
 
@@ -421,7 +430,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             shouldShowLinkPreview: @escaping (URL) -> Bool, showMessageTimeView: Bool,
             messageLinkPreviewLimit: Int, messageFont: UIFont, sections: [MessagesSection],
             ids: [String], mainBackgroundColor: Color, paginationTargetIndexPath: IndexPath? = nil,
-            listSwipeActions: ListSwipeActions
+            listSwipeActions: ListSwipeActions, animationsEnabled: Bool
         ) {
             self.viewModel = viewModel
             self.inputViewModel = inputViewModel
@@ -446,6 +455,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             self.mainBackgroundColor = mainBackgroundColor
             self.paginationTargetIndexPath = paginationTargetIndexPath
             self.listSwipeActions = listSwipeActions
+            self.animationsEnabled = animationsEnabled
         }
 
         /// call pagination handler when this row is reached
