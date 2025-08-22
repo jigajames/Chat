@@ -106,15 +106,24 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             return
         }
 
-        if coordinator.sections.isEmpty {
+        // If animations are disabled (like on first load or thread change),
+        // skip the complex diffing and just reload the data.
+        if !coordinator.animationsEnabled {
             coordinator.sections = sections
-            if !coordinator.animationsEnabled {
-                UIView.performWithoutAnimation {
-                    tableView.reloadData()
-                }
-            } else {
+            UIView.performWithoutAnimation {
                 tableView.reloadData()
             }
+            if !isScrollEnabled {
+                DispatchQueue.main.async {
+                    tableContentHeight = tableView.contentSize.height
+                }
+            }
+            return
+        }
+
+        if coordinator.sections.isEmpty {
+            coordinator.sections = sections
+            tableView.reloadData()
             if !isScrollEnabled {
                 DispatchQueue.main.async {
                     tableContentHeight = tableView.contentSize.height
@@ -128,8 +137,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         }
 
         let prevSections = coordinator.sections
-        //print("0 whole sections:", runID, "\n")
-        //print("whole previous:\n", formatSections(prevSections), "\n")
         let splitInfo = await performSplitInBackground(prevSections, sections)
         await applyUpdatesToTable(tableView, splitInfo: splitInfo) {
             coordinator.sections = $0
