@@ -106,9 +106,13 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             return
         }
 
-        // If animations are disabled (like on first load or thread change),
-        // skip the complex diffing and just reload the data.
-        if !coordinator.animationsEnabled {
+        let oldIDs = Set(coordinator.sections.flatMap { $0.rows.map { $0.id } })
+        let newIDs = Set(sections.flatMap { $0.rows.map { $0.id } })
+        let isDrasticChange = oldIDs.intersection(newIDs).isEmpty && !oldIDs.isEmpty
+
+        // If it's a drastic change (switching threads), or if animations are explicitly disabled for UX reasons (initial load),
+        // use the safe reloadData() path. This prevents crashes and unwanted initial animations.
+        if isDrasticChange || !coordinator.animationsEnabled {
             coordinator.sections = sections
             UIView.performWithoutAnimation {
                 tableView.reloadData()
@@ -429,6 +433,10 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         let mainBackgroundColor: Color
         let listSwipeActions: ListSwipeActions
         let animationsEnabled: Bool
+
+        var oldContentHeight: CGFloat = 0
+        var oldOffsetY: CGFloat = 0
+        var isPrepending: Bool = false
 
         private let impactGenerator = UIImpactFeedbackGenerator(style: .heavy)
 
