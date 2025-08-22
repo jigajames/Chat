@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+public protocol MessagePayload: Hashable, Sendable {
+    func isEqual(to other: any MessagePayload) -> Bool
+}
+
+public extension MessagePayload where Self: Equatable {
+    func isEqual(to other: any MessagePayload) -> Bool {
+        guard let other = other as? Self else {
+            return false
+        }
+        return self == other
+    }
+}
+
 public struct Message: Identifiable, Hashable, Sendable {
 
     public enum Status: Equatable, Hashable, Sendable {
@@ -59,7 +72,7 @@ public struct Message: Identifiable, Hashable, Sendable {
     public var triggerRedraw: UUID?
 
     public var kind: String
-    public var payload: Any?
+    public var payload: (any MessagePayload)?
 
     public init(id: String,
                 user: User,
@@ -72,7 +85,7 @@ public struct Message: Identifiable, Hashable, Sendable {
                 recording: Recording? = nil,
                 replyMessage: ReplyMessage? = nil,
                 kind: String = "text",
-                payload: Any? = nil) {
+                payload: (any MessagePayload)? = nil) {
 
         self.id = id
         self.user = user
@@ -86,6 +99,51 @@ public struct Message: Identifiable, Hashable, Sendable {
         self.replyMessage = replyMessage
         self.kind = kind
         self.payload = payload
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(user)
+        hasher.combine(status)
+        hasher.combine(createdAt)
+        hasher.combine(text)
+        hasher.combine(attachments)
+        hasher.combine(reactions)
+        hasher.combine(giphyMediaId)
+        hasher.combine(recording)
+        hasher.combine(replyMessage)
+        hasher.combine(triggerRedraw)
+        hasher.combine(kind)
+        if let payload = payload {
+            hasher.combine(payload)
+        }
+    }
+
+    public static func == (lhs: Message, rhs: Message) -> Bool {
+        if lhs.payload == nil && rhs.payload == nil {
+            // continue
+        } else if let lhsPayload = lhs.payload, let rhsPayload = rhs.payload {
+            if lhsPayload.isEqual(to: rhsPayload) {
+                // continue
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+
+        return lhs.id == rhs.id &&
+            lhs.user == rhs.user &&
+            lhs.status == rhs.status &&
+            lhs.createdAt == rhs.createdAt &&
+            lhs.text == rhs.text &&
+            lhs.giphyMediaId == rhs.giphyMediaId &&
+            lhs.attachments == rhs.attachments &&
+            lhs.reactions == rhs.reactions &&
+            lhs.recording == rhs.recording &&
+            lhs.replyMessage == rhs.replyMessage &&
+            lhs.triggerRedraw == rhs.triggerRedraw &&
+            lhs.kind == rhs.kind
     }
 
     public static func makeMessage(
