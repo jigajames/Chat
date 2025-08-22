@@ -119,33 +119,6 @@ public struct Message: Identifiable, Hashable, Sendable {
         }
     }
 
-    public static func == (lhs: Message, rhs: Message) -> Bool {
-        if lhs.payload == nil && rhs.payload == nil {
-            // continue
-        } else if let lhsPayload = lhs.payload, let rhsPayload = rhs.payload {
-            if lhsPayload.isEqual(to: rhsPayload) {
-                // continue
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return lhs.id == rhs.id &&
-            lhs.user == rhs.user &&
-            lhs.status == rhs.status &&
-            lhs.createdAt == rhs.createdAt &&
-            lhs.text == rhs.text &&
-            lhs.giphyMediaId == rhs.giphyMediaId &&
-            lhs.attachments == rhs.attachments &&
-            lhs.reactions == rhs.reactions &&
-            lhs.recording == rhs.recording &&
-            lhs.replyMessage == rhs.replyMessage &&
-            lhs.triggerRedraw == rhs.triggerRedraw &&
-            lhs.kind == rhs.kind
-    }
-
     public static func makeMessage(
         id: String,
         user: User,
@@ -191,16 +164,27 @@ extension Message {
 
 extension Message: Equatable {
     public static func == (lhs: Message, rhs: Message) -> Bool {
-        lhs.id == rhs.id &&
-        lhs.user == rhs.user &&
-        lhs.status == rhs.status &&
-        lhs.createdAt == rhs.createdAt &&
-        lhs.text == rhs.text &&
-        lhs.giphyMediaId == rhs.giphyMediaId &&
-        lhs.attachments == rhs.attachments &&
-        lhs.reactions == rhs.reactions &&
-        lhs.recording == rhs.recording &&
-        lhs.replyMessage == rhs.replyMessage
+        if lhs.payload == nil && rhs.payload == nil {
+            // continue
+        } else if let lhsPayload = lhs.payload, let rhsPayload = rhs.payload {
+            if !lhsPayload.isEqual(to: rhsPayload) {
+                return false
+            }
+        } else {
+            return false
+        }
+
+        return lhs.id == rhs.id &&
+            lhs.user == rhs.user &&
+            lhs.status == rhs.status &&
+            lhs.createdAt == rhs.createdAt &&
+            lhs.text == rhs.text &&
+            lhs.giphyMediaId == rhs.giphyMediaId &&
+            lhs.attachments == rhs.attachments &&
+            lhs.reactions == rhs.reactions &&
+            lhs.recording == rhs.recording &&
+            lhs.replyMessage == rhs.replyMessage &&
+            lhs.kind == rhs.kind
     }
 }
 
