@@ -45,6 +45,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
     let ids: [String]
     let listSwipeActions: ListSwipeActions
     let animationsEnabled: Bool
+    let viewId: UUID
 
     @State var isScrolledToTop = false
     @State var updateQueue = UpdateQueue()
@@ -83,6 +84,11 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
     }
 
     func updateUIView(_ tableView: UITableView, context: Context) {
+        if context.coordinator.viewId != viewId {
+            context.coordinator.viewId = viewId
+            tableView.reloadData()
+        }
+
         if !isScrollEnabled {
             DispatchQueue.main.async {
                 tableContentHeight = tableView.contentSize.height
@@ -396,7 +402,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             showMessageTimeView: showMessageTimeView,
             messageLinkPreviewLimit: messageLinkPreviewLimit, messageFont: messageFont,
             sections: sections, ids: ids, mainBackgroundColor: theme.colors.mainBG,
-            listSwipeActions: listSwipeActions, animationsEnabled: animationsEnabled)
+            listSwipeActions: listSwipeActions, animationsEnabled: animationsEnabled, viewId: viewId)
     }
 
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -433,6 +439,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         let mainBackgroundColor: Color
         let listSwipeActions: ListSwipeActions
         let animationsEnabled: Bool
+        var viewId: UUID
 
         var oldContentHeight: CGFloat = 0
         var oldOffsetY: CGFloat = 0
@@ -451,7 +458,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             shouldShowLinkPreview: @escaping (URL) -> Bool, showMessageTimeView: Bool,
             messageLinkPreviewLimit: Int, messageFont: UIFont, sections: [MessagesSection],
             ids: [String], mainBackgroundColor: Color, paginationTargetIndexPath: IndexPath? = nil,
-            listSwipeActions: ListSwipeActions, animationsEnabled: Bool
+            listSwipeActions: ListSwipeActions, animationsEnabled: Bool, viewId: UUID
         ) {
             self.viewModel = viewModel
             self.inputViewModel = inputViewModel
@@ -477,6 +484,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             self.paginationTargetIndexPath = paginationTargetIndexPath
             self.listSwipeActions = listSwipeActions
             self.animationsEnabled = animationsEnabled
+            self.viewId = viewId
         }
 
         /// call pagination handler when this row is reached

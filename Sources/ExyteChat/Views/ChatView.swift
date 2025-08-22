@@ -128,6 +128,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     var recorderSettings: RecorderSettings = RecorderSettings()
     var listSwipeActions: ListSwipeActions = ListSwipeActions()
     var animationsEnabled: Bool = true
+    var viewId: UUID = UUID()
     
     @StateObject private var viewModel = ChatViewModel()
     @StateObject private var inputViewModel = InputViewModel()
@@ -345,7 +346,8 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
             sections: sections,
             ids: ids,
             listSwipeActions: listSwipeActions,
-            animationsEnabled: animationsEnabled
+            animationsEnabled: animationsEnabled,
+            viewId: viewId
         )
         .applyIf(!isScrollEnabled) {
             $0.frame(height: tableContentHeight)
