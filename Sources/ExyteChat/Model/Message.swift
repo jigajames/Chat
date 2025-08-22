@@ -184,6 +184,7 @@ extension Message: Equatable {
             lhs.reactions == rhs.reactions &&
             lhs.recording == rhs.recording &&
             lhs.replyMessage == rhs.replyMessage &&
+            lhs.triggerRedraw == rhs.triggerRedraw &&
             lhs.kind == rhs.kind
     }
 }
