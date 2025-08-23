@@ -76,14 +76,11 @@ struct MessageRow: Equatable {
     let commentsPosition: CommentsPosition?
 
     static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id
-        && lhs.positionInUserGroup == rhs.positionInUserGroup
-        && lhs.positionInMessagesSection == rhs.positionInMessagesSection
-        && lhs.commentsPosition == rhs.commentsPosition
-        && lhs.message.status == rhs.message.status
-        && lhs.message.triggerRedraw == rhs.message.triggerRedraw
-        && lhs.message.text == rhs.message.text
-        && lhs.message.reactions == rhs.message.reactions
+        lhs.id == rhs.id &&
+        lhs.message == rhs.message &&
+        lhs.positionInUserGroup == rhs.positionInUserGroup &&
+        lhs.positionInMessagesSection == rhs.positionInMessagesSection &&
+        lhs.commentsPosition == rhs.commentsPosition
     }
 }
 
