@@ -164,28 +164,62 @@ extension Message {
 
 extension Message: Equatable {
     public static func == (lhs: Message, rhs: Message) -> Bool {
-        if lhs.payload == nil && rhs.payload == nil {
-            // continue
-        } else if let lhsPayload = lhs.payload, let rhsPayload = rhs.payload {
-            if !lhsPayload.isEqual(to: rhsPayload) {
-                return false
-            }
-        } else {
+        if lhs.id != rhs.id {
+            print("Message Equatable failed: id mismatch '\(lhs.id)' vs '\(rhs.id)'")
+            return false
+        }
+        if lhs.user != rhs.user {
+            print("Message Equatable failed: user mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.status != rhs.status {
+            print("Message Equatable failed: status mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.createdAt != rhs.createdAt {
+            print("Message Equatable failed: createdAt mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.text != rhs.text {
+            print("Message Equatable failed: text mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.attachments != rhs.attachments {
+            print("Message Equatable failed: attachments mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.reactions != rhs.reactions {
+            print("Message Equatable failed: reactions mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.recording != rhs.recording {
+            print("Message Equatable failed: recording mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.replyMessage != rhs.replyMessage {
+            print("Message Equatable failed: replyMessage mismatch for id \(lhs.id)")
+            return false
+        }
+        if lhs.kind != rhs.kind {
+            print("Message Equatable failed: kind mismatch for id \(lhs.id)")
             return false
         }
 
-        return lhs.id == rhs.id &&
-            lhs.user == rhs.user &&
-            lhs.status == rhs.status &&
-            lhs.createdAt == rhs.createdAt &&
-            lhs.text == rhs.text &&
-            lhs.giphyMediaId == rhs.giphyMediaId &&
-            lhs.attachments == rhs.attachments &&
-            lhs.reactions == rhs.reactions &&
-            lhs.recording == rhs.recording &&
-            lhs.replyMessage == rhs.replyMessage &&
-            // triggerRedraw is intentionally omitted to prevent unnecessary reloads
-            lhs.kind == rhs.kind
+        if lhs.payload == nil && rhs.payload == nil {
+            // Payloads are both nil, which is equal.
+        } else if let lhsPayload = lhs.payload, let rhsPayload = rhs.payload {
+            if !lhsPayload.isEqual(to: rhsPayload) {
+                print("Message Equatable failed: payload mismatch for id \(lhs.id)")
+                return false
+            }
+        } else {
+            // One has a payload and the other doesn't.
+            print("Message Equatable failed: payload nil mismatch for id \(lhs.id)")
+            return false
+        }
+
+        // Intentionally ignore triggerRedraw for equality checks.
+        return true
     }
 }
 
