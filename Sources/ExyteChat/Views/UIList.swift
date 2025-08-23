@@ -61,9 +61,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50
 
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 50
-
         tableView.showsVerticalScrollIndicator = false
         tableView.estimatedSectionHeaderHeight = 1
         tableView.estimatedSectionFooterHeight = UITableView.automaticDimension
@@ -85,6 +82,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             }
         }
 
+        context.coordinator.tableView = tableView
         return tableView
     }
 
@@ -407,6 +405,8 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
 
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
 
+        weak var tableView: UITableView?
+
         @ObservedObject var viewModel: ChatViewModel
         @ObservedObject var inputViewModel: InputViewModel
 
@@ -430,6 +430,16 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         let messageFont: UIFont
         var sections: [MessagesSection] {
             didSet {
+                // This is the key fix: If we are transitioning from 0 messages to some messages,
+                // it means the table is performing its initial layout. We need to give it a nudge
+                // after the current layout pass to re-calculate the cell heights.
+                if oldValue.isEmpty && !sections.isEmpty {
+                    DispatchQueue.main.async {
+                        self.tableView?.beginUpdates()
+                        self.tableView?.endUpdates()
+                    }
+                }
+
                 if let lastSection = sections.last {
                     paginationTargetIndexPath = IndexPath(row: lastSection.rows.count - 1, section: sections.count - 1)
                 }
