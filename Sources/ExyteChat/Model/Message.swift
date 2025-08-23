@@ -99,6 +99,7 @@ public struct Message: Identifiable, Hashable, Sendable {
         self.replyMessage = replyMessage
         self.kind = kind
         self.payload = payload
+        self.triggerRedraw = nil
     }
 
     public func hash(into hasher: inout Hasher) {
