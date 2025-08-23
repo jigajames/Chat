@@ -12,7 +12,6 @@ public extension ChatView where MessageContent == EmptyView {
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
@@ -20,7 +19,6 @@ public extension ChatView where MessageContent == EmptyView {
          messageMenuAction: MessageMenuActionClosure?) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -35,7 +33,6 @@ public extension ChatView where InputViewContent == EmptyView {
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
@@ -43,7 +40,6 @@ public extension ChatView where InputViewContent == EmptyView {
          messageMenuAction: MessageMenuActionClosure?) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -58,7 +54,6 @@ public extension ChatView where MenuAction == DefaultMessageMenuAction {
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
@@ -66,7 +61,6 @@ public extension ChatView where MenuAction == DefaultMessageMenuAction {
          inputViewBuilder: @escaping InputViewBuilderClosure) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -81,14 +75,12 @@ public extension ChatView where MessageContent == EmptyView, InputViewContent ==
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          messageMenuAction: MessageMenuActionClosure?) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -102,14 +94,12 @@ public extension ChatView where InputViewContent == EmptyView, MenuAction == Def
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          messageBuilder: @escaping MessageBuilderClosure) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -123,14 +113,12 @@ public extension ChatView where MessageContent == EmptyView, MenuAction == Defau
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          inputViewBuilder: @escaping InputViewBuilderClosure) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
@@ -144,13 +132,11 @@ public extension ChatView where MessageContent == EmptyView, InputViewContent ==
     init(messages: [Message],
          chatType: ChatType = .conversation,
          animationsEnabled: Bool = true,
-         viewId: UUID = UUID(),
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
-        self.viewId = viewId
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
