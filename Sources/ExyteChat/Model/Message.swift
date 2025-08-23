@@ -112,7 +112,7 @@ public struct Message: Identifiable, Hashable, Sendable {
         hasher.combine(giphyMediaId)
         hasher.combine(recording)
         hasher.combine(replyMessage)
-        hasher.combine(triggerRedraw)
+        // triggerRedraw is intentionally omitted to prevent unnecessary reloads
         hasher.combine(kind)
         if let payload = payload {
             hasher.combine(payload)
@@ -184,6 +184,7 @@ extension Message: Equatable {
             lhs.reactions == rhs.reactions &&
             lhs.recording == rhs.recording &&
             lhs.replyMessage == rhs.replyMessage &&
+            // triggerRedraw is intentionally omitted to prevent unnecessary reloads
             lhs.kind == rhs.kind
     }
 }
