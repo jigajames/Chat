@@ -521,7 +521,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
                         .ignoresSafeArea(background.safeAreaRegions, edges: background.safeAreaEdges)
                 }
             } else {
-                theme.colors.mainBG
+                Color.clear
             }
         }
     }
