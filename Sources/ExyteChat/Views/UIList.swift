@@ -111,9 +111,9 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
 
         let oldIDs = Set(coordinator.sections.flatMap { $0.rows.map { $0.id } })
         let newIDs = Set(sections.flatMap { $0.rows.map { $0.id } })
-        let isDrasticChange = oldIDs.intersection(newIDs).isEmpty
+        let isDrasticChange = oldIDs.intersection(newIDs).isEmpty && !oldIDs.isEmpty
 
-        // If it's a drastic change (initial load or switching threads), or if animations are explicitly disabled for UX reasons (initial load),
+        // If it's a drastic change (switching threads), or if animations are explicitly disabled for UX reasons (initial load),
         // use the safe reloadData() path. This prevents crashes and unwanted initial animations.
         if isDrasticChange || !coordinator.animationsEnabled {
             coordinator.sections = sections
