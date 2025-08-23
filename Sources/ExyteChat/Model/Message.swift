@@ -185,7 +185,7 @@ extension Message: Equatable {
             lhs.reactions == rhs.reactions &&
             lhs.recording == rhs.recording &&
             lhs.replyMessage == rhs.replyMessage &&
-            // triggerRedraw is intentionally omitted to prevent unnecessary reloads
+            lhs.triggerRedraw == rhs.triggerRedraw &&
             lhs.kind == rhs.kind
     }
 }
