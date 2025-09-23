@@ -16,7 +16,8 @@ public extension ChatView where MessageContent == EmptyView {
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          inputViewBuilder: @escaping InputViewBuilderClosure,
-         messageMenuAction: MessageMenuActionClosure?) {
+         messageMenuAction: MessageMenuActionClosure?,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -25,6 +26,7 @@ public extension ChatView where MessageContent == EmptyView {
         self.ids = messages.map { $0.id }
         self.inputViewBuilder = inputViewBuilder
         self.messageMenuAction = messageMenuAction
+        self.localization = localization
     }
 }
 
@@ -37,7 +39,8 @@ public extension ChatView where InputViewContent == EmptyView {
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          messageBuilder: @escaping MessageBuilderClosure,
-         messageMenuAction: MessageMenuActionClosure?) {
+         messageMenuAction: MessageMenuActionClosure?,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -46,6 +49,7 @@ public extension ChatView where InputViewContent == EmptyView {
         self.ids = messages.map { $0.id }
         self.messageBuilder = messageBuilder
         self.messageMenuAction = messageMenuAction
+        self.localization = localization
     }
 }
 
@@ -58,7 +62,8 @@ public extension ChatView where MenuAction == DefaultMessageMenuAction {
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
          messageBuilder: @escaping MessageBuilderClosure,
-         inputViewBuilder: @escaping InputViewBuilderClosure) {
+         inputViewBuilder: @escaping InputViewBuilderClosure,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -67,6 +72,7 @@ public extension ChatView where MenuAction == DefaultMessageMenuAction {
         self.ids = messages.map { $0.id }
         self.messageBuilder = messageBuilder
         self.inputViewBuilder = inputViewBuilder
+        self.localization = localization
     }
 }
 
@@ -78,7 +84,8 @@ public extension ChatView where MessageContent == EmptyView, InputViewContent ==
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
-         messageMenuAction: MessageMenuActionClosure?) {
+         messageMenuAction: MessageMenuActionClosure?,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -86,6 +93,7 @@ public extension ChatView where MessageContent == EmptyView, InputViewContent ==
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
         self.ids = messages.map { $0.id }
         self.messageMenuAction = messageMenuAction
+        self.localization = localization
     }
 }
 
@@ -97,7 +105,8 @@ public extension ChatView where InputViewContent == EmptyView, MenuAction == Def
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
-         messageBuilder: @escaping MessageBuilderClosure) {
+         messageBuilder: @escaping MessageBuilderClosure,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -105,6 +114,7 @@ public extension ChatView where InputViewContent == EmptyView, MenuAction == Def
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
         self.ids = messages.map { $0.id }
         self.messageBuilder = messageBuilder
+        self.localization = localization
     }
 }
 
@@ -116,7 +126,8 @@ public extension ChatView where MessageContent == EmptyView, MenuAction == Defau
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
          reactionDelegate: ReactionDelegate? = nil,
-         inputViewBuilder: @escaping InputViewBuilderClosure) {
+         inputViewBuilder: @escaping InputViewBuilderClosure,
+         localization: ChatLocalization = ChatView.createLocalization()) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
@@ -124,6 +135,7 @@ public extension ChatView where MessageContent == EmptyView, MenuAction == Defau
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
         self.ids = messages.map { $0.id }
         self.inputViewBuilder = inputViewBuilder
+        self.localization = localization
     }
 }
 
@@ -134,12 +146,13 @@ public extension ChatView where MessageContent == EmptyView, InputViewContent ==
          animationsEnabled: Bool = true,
          replyMode: ReplyMode = .quote,
          didSendMessage: @escaping (DraftMessage) -> Void,
-         reactionDelegate: ReactionDelegate? = nil) {
+          reactionDelegate: ReactionDelegate? = nil) {
         self.type = chatType
         self.animationsEnabled = animationsEnabled
         self.didSendMessage = didSendMessage
         self.reactionDelegate = reactionDelegate
         self.sections = ChatView.mapMessages(messages, chatType: chatType, replyMode: replyMode)
         self.ids = messages.map { $0.id }
+        self.localization = ChatView.createLocalization()
     }
 }

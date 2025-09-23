@@ -119,6 +119,12 @@ struct InputView: View {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(style == .message ? theme.colors.inputBG : theme.colors.inputSignatureBG)
                 }
+                .shadow(
+                    color: theme.colors.inputShadow.color,
+                    radius: theme.colors.inputShadow.radius,
+                    x: theme.colors.inputShadow.x,
+                    y: theme.colors.inputShadow.y
+                )
                 
                 rightOutsideButton
             }

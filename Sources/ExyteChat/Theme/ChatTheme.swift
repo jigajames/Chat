@@ -105,6 +105,20 @@ public struct ChatTheme {
         )
     }
 
+    public struct ShadowConfig {
+        public var color: Color
+        public var radius: CGFloat
+        public var x: CGFloat
+        public var y: CGFloat
+
+        public init(color: Color = .clear, radius: CGFloat = 0, x: CGFloat = 0, y: CGFloat = 0) {
+            self.color = color
+            self.radius = radius
+            self.x = x
+            self.y = y
+        }
+    }
+
     public struct Colors {
         public var mainBG: Color
         public var mainTint: Color
@@ -140,6 +154,7 @@ public struct ChatTheme {
 
         public var sendButtonBackground: Color
         public var recordDot: Color
+        public var inputShadow: ShadowConfig
 
         public init(
             mainBG: Color = Color("mainBG", bundle: .current),
@@ -167,7 +182,8 @@ public struct ChatTheme {
             statusError: Color = Color("statusError", bundle: .current),
             statusGray: Color = Color("statusGray", bundle: .current),
             sendButtonBackground: Color = Color("messageMyBG", bundle: .current),
-            recordDot: Color = Color("menuTextDelete", bundle: .current)
+            recordDot: Color = Color("menuTextDelete", bundle: .current),
+            inputShadow: ShadowConfig = ShadowConfig()
         ) {
             self.mainBG = mainBG
             self.mainTint = mainTint
@@ -195,8 +211,9 @@ public struct ChatTheme {
             self.statusGray = statusGray
             self.sendButtonBackground = sendButtonBackground
             self.recordDot = recordDot
+            self.inputShadow = inputShadow
         }
-        
+
         public init(copy: Colors, mainBG: Color) {
             self.mainBG = mainBG
             self.mainTint = copy.mainTint
@@ -224,6 +241,7 @@ public struct ChatTheme {
             self.statusGray = copy.statusGray
             self.sendButtonBackground = copy.sendButtonBackground
             self.recordDot = copy.recordDot
+            self.inputShadow = copy.inputShadow
         }
     }
 
