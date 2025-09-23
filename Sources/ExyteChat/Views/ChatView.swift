@@ -534,7 +534,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
         return availableInputs.contains(AvailableInputType.giphy)
     }
     
-    static func createLocalization() -> ChatLocalization {
+    public static func createLocalization() -> ChatLocalization {
         return ChatLocalization(
             inputPlaceholder: String(localized: "Type a message..."),
             signatureText: String(localized: "Add signature..."),
