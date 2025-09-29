@@ -45,7 +45,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
     let ids: [String]
     let listSwipeActions: ListSwipeActions
     let animationsEnabled: Bool
-    let bottomInset: CGFloat
 
     @State var isScrolledToTop = false
     @State var updateQueue = UpdateQueue()
@@ -68,9 +67,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         tableView.backgroundColor = UIColor(theme.colors.mainBG)
         tableView.scrollsToTop = false
         tableView.isScrollEnabled = isScrollEnabled
-
-        tableView.contentInset.bottom = bottomInset
-        tableView.scrollIndicatorInsets.bottom = bottomInset
 
         NotificationCenter.default.addObserver(forName: .onScrollToBottom, object: nil, queue: nil) { _ in
             DispatchQueue.main.async {
@@ -97,7 +93,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         }
 
         if context.coordinator.sections == sections {
-            updateInsets(tableView)
             return
         }
 
@@ -108,17 +103,9 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         }
     }
 
-    private func updateInsets(_ tableView: UITableView) {
-        if abs(tableView.contentInset.bottom - bottomInset) > 0.5 {
-            tableView.contentInset.bottom = bottomInset
-            tableView.scrollIndicatorInsets.bottom = bottomInset
-        }
-    }
-
     @MainActor
     private func updateIfNeeded(coordinator: Coordinator, tableView: UITableView) async {
         if coordinator.sections == sections {
-            updateInsets(tableView)
             return
         }
 
@@ -138,7 +125,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
                     tableContentHeight = tableView.contentSize.height
                 }
             }
-            updateInsets(tableView)
             return
         }
 
@@ -150,7 +136,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
                     tableContentHeight = tableView.contentSize.height
                 }
             }
-            updateInsets(tableView)
             return
         }
 
@@ -163,7 +148,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         await applyUpdatesToTable(tableView, splitInfo: splitInfo) {
             coordinator.sections = $0
         }
-        updateInsets(tableView)
     }
 
     nonisolated private func performSplitInBackground(_  prevSections:  [MessagesSection], _ sections: [MessagesSection]) async -> SplitInfo {

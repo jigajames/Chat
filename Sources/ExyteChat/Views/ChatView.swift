@@ -345,8 +345,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
             sections: sections,
             ids: ids,
             listSwipeActions: listSwipeActions,
-            animationsEnabled: animationsEnabled,
-            bottomInset: max(0, inputViewSize.height + 6)
+            animationsEnabled: animationsEnabled
         )
         .applyIf(!isScrollEnabled) {
             $0.frame(height: tableContentHeight)
