@@ -129,11 +129,9 @@ struct InputView: View {
                 rightOutsideButton
             }
             .padding(.horizontal, MessageView.horizontalScreenEdgePadding)
-            .padding(.top, 6)
-            .padding(.bottom, 8)
+            .padding(.vertical, 8)
         }
         .background(backgroundColor)
-        .padding(.bottom, 2)
         .onAppear {
             viewModel.recordingPlayer = recordingPlayer
             viewModel.setRecorderSettings(recorderSettings: recorderSettings)
