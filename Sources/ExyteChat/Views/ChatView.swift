@@ -128,6 +128,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     var recorderSettings: RecorderSettings = RecorderSettings()
     var listSwipeActions: ListSwipeActions = ListSwipeActions()
     var animationsEnabled: Bool = true
+    var chatListContentInsets: UIEdgeInsets = .zero
     
     @StateObject private var viewModel = ChatViewModel()
     @StateObject private var inputViewModel = InputViewModel()
@@ -345,7 +346,8 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
             sections: sections,
             ids: ids,
             listSwipeActions: listSwipeActions,
-            animationsEnabled: animationsEnabled
+            animationsEnabled: animationsEnabled,
+            chatListContentInsets: chatListContentInsets
         )
         .applyIf(!isScrollEnabled) {
             $0.frame(height: tableContentHeight)
@@ -737,6 +739,12 @@ public extension ChatView {
             allowEmojiSearch: allowEmojiSearchFor,
             shouldShowOverview: shouldShowOverviewFor
         )
+        return view
+    }
+    
+    func chatListContentInsets(_ insets: UIEdgeInsets) -> ChatView {
+        var view = self
+        view.chatListContentInsets = insets
         return view
     }
 }
