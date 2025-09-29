@@ -45,7 +45,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
     let ids: [String]
     let listSwipeActions: ListSwipeActions
     let animationsEnabled: Bool
-    let chatListContentInsets: UIEdgeInsets
 
     @State var isScrolledToTop = false
     @State var updateQueue = UpdateQueue()
@@ -68,8 +67,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         tableView.backgroundColor = UIColor(theme.colors.mainBG)
         tableView.scrollsToTop = false
         tableView.isScrollEnabled = isScrollEnabled
-
-        tableView.contentInset = chatListContentInsets
 
         NotificationCenter.default.addObserver(forName: .onScrollToBottom, object: nil, queue: nil) { _ in
             DispatchQueue.main.async {
@@ -402,7 +399,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             showMessageTimeView: showMessageTimeView,
             messageLinkPreviewLimit: messageLinkPreviewLimit, messageFont: messageFont,
             sections: sections, ids: ids, mainBackgroundColor: theme.colors.mainBG,
-            listSwipeActions: listSwipeActions, animationsEnabled: animationsEnabled, chatListContentInsets: chatListContentInsets)
+            listSwipeActions: listSwipeActions, animationsEnabled: animationsEnabled)
     }
 
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -439,7 +436,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
         let mainBackgroundColor: Color
         let listSwipeActions: ListSwipeActions
         let animationsEnabled: Bool
-        let chatListContentInsets: UIEdgeInsets
 
         var oldContentHeight: CGFloat = 0
         var oldOffsetY: CGFloat = 0
@@ -458,7 +454,7 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             shouldShowLinkPreview: @escaping (URL) -> Bool, showMessageTimeView: Bool,
             messageLinkPreviewLimit: Int, messageFont: UIFont, sections: [MessagesSection],
             ids: [String], mainBackgroundColor: Color, paginationTargetIndexPath: IndexPath? = nil,
-            listSwipeActions: ListSwipeActions, animationsEnabled: Bool, chatListContentInsets: UIEdgeInsets
+            listSwipeActions: ListSwipeActions, animationsEnabled: Bool
         ) {
             self.viewModel = viewModel
             self.inputViewModel = inputViewModel
@@ -484,7 +480,6 @@ struct UIList<MessageContent: View, InputView: View>: UIViewRepresentable {
             self.paginationTargetIndexPath = paginationTargetIndexPath
             self.listSwipeActions = listSwipeActions
             self.animationsEnabled = animationsEnabled
-            self.chatListContentInsets = chatListContentInsets
         }
 
         /// call pagination handler when this row is reached
