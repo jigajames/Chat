@@ -101,6 +101,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     
     /// date section header builder
     var headerBuilder: ((Date)->AnyView)?
+    var footerBuilder: (()->AnyView)?
     
     /// provide strings for the chat view, these can be localized in the Localizable.strings files
     var localization: ChatLocalization = createLocalization()
@@ -129,6 +130,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     var listSwipeActions: ListSwipeActions = ListSwipeActions()
     var animationsEnabled: Bool = true
     var chatListContentInsets: UIEdgeInsets = .zero
+    var chatListSpacing: CGFloat? = nil
     
     @StateObject private var viewModel = ChatViewModel()
     @StateObject private var inputViewModel = InputViewModel()
@@ -250,7 +252,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
     }
     
     var mainView: some View {
-        VStack {
+        VStack(spacing: chatListSpacing) {
             if showNetworkConnectionProblem, !networkMonitor.isConnected {
                 waitingForNetwork
             }
@@ -330,6 +332,7 @@ public struct ChatView<MessageContent: View, InputViewContent: View, MenuAction:
             messageBuilder: messageBuilder,
             mainHeaderBuilder: mainHeaderBuilder,
             headerBuilder: headerBuilder,
+            footerBuilder: footerBuilder,
             inputView: inputView,
             type: type,
             showDateHeaders: showDateHeaders,
@@ -574,6 +577,14 @@ public extension ChatView {
         }
         return view
     }
+
+    func footerBuilder<V: View>(_ builder: @escaping ()->V) -> ChatView {
+        var view = self
+        view.footerBuilder = {
+            AnyView(builder())
+        }
+        return view
+    }
     
     func isListAboveInputView(_ isAbove: Bool) -> ChatView {
         var view = self
@@ -745,6 +756,12 @@ public extension ChatView {
     func chatListContentInsets(_ insets: UIEdgeInsets) -> ChatView {
         var view = self
         view.chatListContentInsets = insets
+        return view
+    }
+
+    func chatListSpacing(_ spacing: CGFloat) -> ChatView {
+        var view = self
+        view.chatListSpacing = spacing
         return view
     }
 }
