@@ -10,17 +10,12 @@ import SwiftUI
 public extension EnvironmentValues {
     #if swift(>=6.0)
     @Entry var chatTheme = ChatTheme()
-    @Entry var giphyConfig = GiphyConfiguration()
     #else
     var chatTheme: ChatTheme {
         get { self[ChatThemeKey.self] }
         set { self[ChatThemeKey.self] = newValue }
     }
 
-    var giphyConfig: GiphyConfiguration {
-        get { self[GiphyConfigurationKey.self] }
-        set { self[GiphyConfigurationKey.self] = newValue }
-    }
     #endif
 }
 
@@ -30,9 +25,6 @@ public extension EnvironmentValues {
     public static let defaultValue = ChatTheme()
 }
 
-public struct GiphyConfigurationKey: EnvironmentKey {
-    public static let defaultValue = GiphyConfiguration()
-}
 #endif
 
 extension View {
@@ -48,9 +40,6 @@ extension View {
         self.environment(\.chatTheme, ChatTheme(colors: colors, images: images))
     }
 
-    public func giphyConfig(_ config: GiphyConfiguration) -> some View {
-        self.environment(\.giphyConfig, config)
-    }
 }
 
 public struct ChatTheme {
